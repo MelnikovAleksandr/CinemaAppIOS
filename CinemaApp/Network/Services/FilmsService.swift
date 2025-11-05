@@ -1,0 +1,52 @@
+//
+//  FilmsService.swift
+//  CinemaApp
+//
+//  Created by Александр Мельников on 04.11.2025.
+//
+
+import Foundation
+
+protocol FilmsService: Sendable {
+    
+    func fetchFilms() async throws -> [Film]
+
+    func fetchPeople(from URLString: String) async throws -> Person
+}
+
+
+struct FilmsServiceImpl: FilmsService {
+    
+    func fetch<T: Decodable>(from URLString: String, type: T.Type) async throws -> T {
+        guard let url = URL(string: URLString) else {
+            throw APIError.invalideURL
+        }
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                throw APIError.invalidResponse
+            }
+    
+            return try JSONDecoder().decode(type, from: data)
+        } catch let error as DecodingError{
+            throw APIError.decoding(error)
+        } catch let error as URLError {
+            throw APIError.networkError(error)
+        }
+        
+        
+    }
+    
+    func fetchPeople(from URLString: String) async throws -> Person {
+        return try await fetch(from: URLString, type: Person.self)
+    }
+    
+    func fetchFilms() async throws -> [Film] {
+        let url = "https://ghibliapi.vercel.app/films"
+        return try await fetch(from: url, type: [Film].self)
+    }
+    
+
+}
