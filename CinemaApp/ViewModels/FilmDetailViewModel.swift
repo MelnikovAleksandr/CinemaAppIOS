@@ -20,7 +20,7 @@ class FilmDetailViewModel {
     }
     
     var state: State = .idle
-    let service: FilmsService
+    private let service: FilmsService
     
     init(service: FilmsService = FilmsServiceImpl()) {
         self.service = service
@@ -39,6 +39,7 @@ class FilmDetailViewModel {
                         try await self.service.fetchPeople(from: personUrl)
                     }
                 }
+                
                 for try await person in group {
                     loadedPeopleArray.append(person)
                 }

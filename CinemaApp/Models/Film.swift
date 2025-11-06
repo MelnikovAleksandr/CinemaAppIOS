@@ -25,7 +25,7 @@ struct Film: Codable, Identifiable, Equatable, Hashable {
     let locations: [String]
     let vehicles: [String]
     let url: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case title = "title"
@@ -47,7 +47,28 @@ struct Film: Codable, Identifiable, Equatable, Hashable {
     }
     
     static var example: Film {
-        MockFilmsService().fetchFilm()
+        let bannerURL = URL.convertAssetImage(named: "bannerImage")
+        let posterURL = URL.convertAssetImage(named: "posterImage")
+        
+        return Film(
+            id: "2baf70d1",
+            title: "Castle in the Sky",
+            originalTitle: "天空の城ラピュタ",
+            originalTitleRomanised: "Tenkū no shiro Rapyuta",
+            image: posterURL?.absoluteString ?? "",
+            movieBanner: bannerURL?.absoluteString ?? "",
+            description: "The orphan Sheeta inherited a mysterious crystal that links her to the mythical sky-kingdom of Laputa. With the help of resourceful Pazu and a rollicking band of sky pirates, she makes her way to the ruins of the once-great civilization. Sheeta and Pazu must outwit the evil Muska, who plans to use Laputa's science to make himself ruler of the world.",
+            director: "",
+            producer: "",
+            releaseDate: "",
+            runningTime: "",
+            rtScore: "",
+            people: ["https://ghibliapi.vercel.app/people/598f7048-74ff-41e0-92ef-87dc1ad980a9"],
+            species: [],
+            locations: [],
+            vehicles: [],
+            url: ""
+        )
     }
 }
 
