@@ -10,7 +10,7 @@ import SwiftUI
 struct FilmDetailScreen: View {
     
     let film: Film
-    
+    let favoritesViewModel: FavoritesViewModel
     @State private var viewModel = FilmDetailViewModel()
     
     var body: some View {
@@ -38,6 +38,11 @@ struct FilmDetailScreen: View {
                     }
                 }.padding()
             }
+            .toolbar {
+                FavoriteButton(filmId: film.id, favoritesViewModel: favoritesViewModel)
+                    .buttonStyle(.plain)
+                    .controlSize(.large)
+            }
             .task(id: film) {
                 await viewModel.fetch(for: film)
             }
@@ -47,5 +52,7 @@ struct FilmDetailScreen: View {
 
 
 #Preview {
-    FilmDetailScreen(film: Film.example)
+    NavigationStack {
+        FilmDetailScreen(film: Film.example, favoritesViewModel: FavoritesViewModel(favoritesStorage: MockFavoriteStorage()))
+    }
 }

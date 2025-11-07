@@ -10,10 +10,16 @@ import SwiftUI
 struct FavoritesScreen: View {
     
     let filmsViewModel: FilmsViewModel
-    
+    let favoritesViewModel: FavoritesViewModel
     var films: [Film] {
-        // TODO
-        return []
+        let favorites = favoritesViewModel.favoritesIDs
+        switch filmsViewModel.state {
+        case .loaded(let films):
+            return films.filter { film in
+                favorites.contains(film.id)
+            }
+        default: return []
+        }
     }
     
     var body: some View {
@@ -25,7 +31,7 @@ struct FavoritesScreen: View {
                         systemImage: "heart"
                     )
                 } else {
-                    FilmListView(films: films)
+                    FilmListView(films: films, favoritesViewModel: favoritesViewModel)
                 }
             }.navigationTitle("Favorites")
         }
@@ -34,6 +40,6 @@ struct FavoritesScreen: View {
 
 #Preview {
     FavoritesScreen(
-        filmsViewModel: FilmsViewModel(service: MockFilmsService())
-    )
+        filmsViewModel: FilmsViewModel.example,
+        favoritesViewModel: FavoritesViewModel.example)
 }

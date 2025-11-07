@@ -19,7 +19,6 @@ class FilmsViewModel {
         case error(String)
     }
     var state: State = .idle
-    var films: [Film] = []
     
     private let service: FilmsService
     
@@ -39,5 +38,12 @@ class FilmsViewModel {
             self.state = .error("unknown error")
         }
     }
-
+    
+    // MARK: - Preview
+    static var example: FilmsViewModel {
+        let vm = FilmsViewModel(service: MockFilmsService())
+        vm.state = .loaded([Film.example, Film.exampleFavorite])
+        return vm
+    }
+    
 }
