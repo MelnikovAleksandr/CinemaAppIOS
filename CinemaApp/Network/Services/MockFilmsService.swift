@@ -39,10 +39,18 @@ struct MockFilmsService: FilmsService {
         return data.people.first!
     }
     
+    func searchFilms(for serachTerm: String) async throws -> [Film] {
+        let allFilms = try await fetchFilms()
+        return allFilms.filter { film in
+            film.title.localizedStandardContains(serachTerm)
+        }
+    }
+    
     //MARK: - preview/testing only
 
     func fetchFilm() -> Film {
         let data = try! loadSampleData()
         return data.films.first!
     }
+    
 }

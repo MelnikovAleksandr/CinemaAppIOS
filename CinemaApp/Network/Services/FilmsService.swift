@@ -12,11 +12,13 @@ protocol FilmsService: Sendable {
     func fetchFilms() async throws -> [Film]
 
     func fetchPeople(from URLString: String) async throws -> Person
+    
+    func searchFilms(for serachTerm: String) async throws -> [Film]
 }
 
 
 struct FilmsServiceImpl: FilmsService {
-    
+
     func fetch<T: Decodable>(from URLString: String, type: T.Type) async throws -> T {
         guard let url = URL(string: URLString) else {
             throw APIError.invalideURL
@@ -48,5 +50,11 @@ struct FilmsServiceImpl: FilmsService {
         return try await fetch(from: url, type: [Film].self)
     }
     
+    func searchFilms(for serachTerm: String) async throws -> [Film] {
+        let allFilms = try await fetchFilms()
+        return allFilms.filter { film in
+            film.title.localizedStandardContains(serachTerm)
+        }
+    }
 
 }
