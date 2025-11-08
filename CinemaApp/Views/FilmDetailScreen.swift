@@ -30,8 +30,12 @@ struct FilmDetailScreen: View {
                     case .loading:
                         ProgressView()
                     case .loaded(let people):
-                        ForEach(people) { person in
-                            Text(person.name)
+                        if people.isEmpty {
+                            Text("No characters")
+                        } else {
+                            ForEach(people) { person in
+                                Text(person.name)
+                            }
                         }
                     case .error(let error):
                         Text(error).foregroundStyle(.pink)

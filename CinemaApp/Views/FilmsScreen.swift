@@ -20,7 +20,7 @@ struct FilmsScreen: View {
                     Text("No films yet")
                 case .loading:
                     ProgressView {
-                        Text("Loading")
+                        Text("Loading...")
                     }
                 case .loaded(let films):
                     FilmListView(films: films, favoritesViewModel: favoritesViewModel)

@@ -27,7 +27,7 @@ class FilmDetailViewModel {
         state = .loading
         var loadedPeopleArray: [Person] = []
         do {
-            try await withThrowingTaskGroup(of: Person.self) { group in
+            try await withThrowingTaskGroup(of: Person?.self) { group in
                 for personUrl in film.people {
                     group.addTask {
                         try await self.service.fetchPeople(from: personUrl)
@@ -35,7 +35,9 @@ class FilmDetailViewModel {
                 }
                 
                 for try await person in group {
-                    loadedPeopleArray.append(person)
+                    if person != nil {
+                        loadedPeopleArray.append(person!)
+                    }
                 }
             }
             state = .loaded(loadedPeopleArray)

@@ -34,7 +34,7 @@ struct MockFilmsService: FilmsService {
         return data.films
     }
     
-    func fetchPeople(from URLString: String) async throws -> Person {
+    func fetchPeople(from URLString: String) async throws -> Person? {
         let data = try loadSampleData()
         return data.people.first!
     }

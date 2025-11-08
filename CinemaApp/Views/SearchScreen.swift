@@ -23,7 +23,8 @@ struct SearchScreen: View {
             VStack {
                 switch searchViewModel.state {
                 case .idle:
-                    Text("SearchScreen")
+                    Text("Your search results will be shown here.")
+                        .foregroundStyle(.secondary)
                 case .loading:
                     ProgressView()
                 case .loaded(let films):
@@ -32,6 +33,7 @@ struct SearchScreen: View {
                     Text(error)
                 }
             }
+            .navigationTitle("Search Movies")
             .searchable(text: $text)
             .task(id: text) {
                 await searchViewModel.fetch(for: text)

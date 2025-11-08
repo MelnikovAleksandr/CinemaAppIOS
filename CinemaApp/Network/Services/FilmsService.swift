@@ -11,7 +11,7 @@ protocol FilmsService: Sendable {
     
     func fetchFilms() async throws -> [Film]
 
-    func fetchPeople(from URLString: String) async throws -> Person
+    func fetchPeople(from URLString: String) async throws -> Person?
     
     func searchFilms(for serachTerm: String) async throws -> [Film]
 }
@@ -41,8 +41,13 @@ struct FilmsServiceImpl: FilmsService {
         
     }
     
-    func fetchPeople(from URLString: String) async throws -> Person {
-        return try await fetch(from: URLString, type: Person.self)
+    func fetchPeople(from URLString: String) async throws -> Person? {
+        let emptyUrl = "https://ghibliapi.vercel.app/people/"
+        if URLString == emptyUrl {
+            return nil
+        } else {
+            return try await fetch(from: URLString, type: Person.self)
+        }
     }
     
     func fetchFilms() async throws -> [Film] {
